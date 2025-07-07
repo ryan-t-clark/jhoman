@@ -1,0 +1,6 @@
+includes:
+  - common.yaml
+
+paths:
+  input_dir: /Users/ryanclark/workspace/jhoman/testing
+  output_path: /Users/ryanclark/workspace/jhoman/testing/output.csv

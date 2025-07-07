@@ -1,0 +1,3 @@
+logging:
+  log_dir: /tmp
+  log_level: INFO
