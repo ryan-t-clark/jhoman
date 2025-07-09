@@ -35,10 +35,8 @@ def merge_new_orders(config: dict):
 
     logger.info(f"Merged {len(merged_df)} rows")
 
-    
-
     logger.info(f"Writing output to: {output_path}")
-    merged_df.to_csv(output_path)
+    merged_df.to_csv(output_path, index=False)
     
 
 def main():

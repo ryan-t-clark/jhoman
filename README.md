@@ -1,5 +1,13 @@
 ## Python Environment and Setup
 
+I'm currently looking into setting up an easy way to set up the python environment, but for now to run the code you will need
+
+```
+pip install pandas
+```
+```
+pip install pyyaml
+```
 
 ## Repository Structure
 
