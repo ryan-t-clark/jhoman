@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime
 
 STACK_LEVEL = 2
+_LINE_LEN = 30
 
 class ScriptLogger:
     def __init__(self, name: str, log_level=logging.INFO):
@@ -50,10 +51,13 @@ class ScriptLogger:
         self.log_filepath = log_file
 
     def _display_config(self):
+        self.info(f"Running {self.config['context']['script_name']}")
+        self.info(f"Command line: {''.join(sys.argv)}")
+        self.info("=" * _LINE_LEN)
         formatted_lines = format_dict(self.config)
         for line in formatted_lines:
             self.info(line)
-        self.info("=" * 25)
+        self.info("=" * _LINE_LEN)
 
     def initialize_from_config(self, config: dict):
         self.config = config

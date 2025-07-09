@@ -20,10 +20,11 @@ def merge_new_orders(config: dict):
         logger.error(f"Provided input path does not exist: {input_dir}")
         sys.exit(1)
 
-    merged_df: pd.DataFrame = pd.DataFrame()
+    output_path: Path = Path(config['paths']['output_path'])
 
+    merged_df: pd.DataFrame = pd.DataFrame()
     for path in input_dir.iterdir():
-        if path.is_file() and path.suffix == '.csv':
+        if path.is_file() and path.suffix == '.csv' and path != output_path:
             data = pd.read_csv(path)
             logger.info(f"Found {len(data)} rows in {path}")
             merged_df = pd.concat([merged_df, data], ignore_index=True)
@@ -34,7 +35,7 @@ def merge_new_orders(config: dict):
 
     logger.info(f"Merged {len(merged_df)} rows")
 
-    output_path: Path = Path(config['paths']['output_path'])
+    
 
     logger.info(f"Writing output to: {output_path}")
     merged_df.to_csv(output_path)

@@ -10,6 +10,7 @@ __author__ = "Ryan Clark"
 import os
 import sys
 import yaml
+import socket
 import getpass
 import argparse
 import datetime as dt
@@ -60,14 +61,16 @@ def merge_dicts(primary_config_dict: dict, config_list: list[dict]) -> dict:
     return result
 
 
-def load_context(config: dict) -> dict:
-    context: dict = {
-        "script_name": os.path.basename(sys.argv[0]),
-        "start_time": dt.datetime.now(),
-        "user": getpass.getuser()
+def load_context() -> dict:
+    config: dict = {
+        "context": {
+            "script_name": os.path.basename(sys.argv[0]),
+            "start_time": dt.datetime.now(),
+            "user": getpass.getuser(),
+            "hostname": socket.gethostname(),
+            "platform": sys.platform
+        }
     }
-
-    config['context'] = context
 
     return config
 
@@ -79,6 +82,8 @@ def load_config(args):
     primary_config_path: Path = Path(args.config)
 
     primary_config_dict, include_list = load_yaml_file(primary_config_path)
+
+    config: dict = load_context()
 
     config_list: list[dict] = []
 
@@ -96,7 +101,7 @@ def load_config(args):
 
     merged_config: dict = merge_dicts(primary_config_dict, config_list)
 
-    config = load_context(merged_config)
+    config.update(merged_config)
 
     return config
 
