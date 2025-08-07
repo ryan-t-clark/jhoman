@@ -8,6 +8,9 @@ pip install pandas
 ```
 pip install pyyaml
 ```
+```
+pip install cryptography
+```
 
 ## Repository Structure
 

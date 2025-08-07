@@ -17,12 +17,26 @@ import datetime as dt
 from pathlib import Path
 from copy import deepcopy
 
+from .encryption_utils import decrypt
+
+class DecryptConstructor:    
+    @staticmethod
+    def decrypt_constructor(loader, node):
+        value = loader.construct_scalar(node)
+        return decrypt(value)
+
+
+def setup_yaml_constructors():
+    yaml.SafeLoader.add_constructor('!decrypt', DecryptConstructor.decrypt_constructor)
+
 
 def load_yaml_file(config_path: str) -> tuple[dict, list[str]]:
     config_path: Path = Path(config_path)
 
     if not config_path.exists():
         raise RuntimeError(f"Config file does not exist: {config_path}")
+
+    setup_yaml_constructors()
 
     try:
         with open(config_path, 'r') as file:
@@ -84,6 +98,8 @@ def load_config(args):
     primary_config_dict, include_list = load_yaml_file(primary_config_path)
 
     config: dict = load_context()
+    
+    config['args'] = vars(args)
 
     config_list: list[dict] = []
 
@@ -109,5 +125,5 @@ def load_config(args):
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config', required=True, type=Path)
-    parser.add_argument('-e', '--env', required=False, choices=['DEV', 'TEST', 'PROD'])
+    parser.add_argument('-e', '--site', required=False, choices=['DEV', 'TEST', 'PROD'])
     return parser

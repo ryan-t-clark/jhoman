@@ -10,8 +10,15 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
+from .encryption_utils import DecryptedValue
+
 STACK_LEVEL = 2
 _LINE_LEN = 30
+
+def hide_decrypted_val(value) -> str:
+    if isinstance(value, DecryptedValue):
+        return "*" * 10
+    return str(value)
 
 class ScriptLogger:
     def __init__(self, name: str, log_level=logging.INFO):
@@ -142,14 +149,15 @@ def format_dict(d, indent=0):
     
     for key, value in d.items():
         if isinstance(value, dict) and value:
-            # Key has children - surround with brackets
             lines.append(f"{spacing}[{key}]")
             lines.extend(format_dict(value, indent + 1))
         else:
-            # Leaf node or empty dict - no brackets
             if isinstance(value, dict):
                 lines.append(f"{spacing}{key} -> {{}}")
             else:
-                lines.append(f"{spacing}{key} -> {value}")
+                if isinstance(value, DecryptedValue):
+                    lines.append(f"{spacing}{key} -> {hide_decrypted_val(value)}")
+                else:
+                    lines.append(f"{spacing}{key} -> {value}")
     
     return lines

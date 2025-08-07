@@ -1,0 +1,6 @@
+includes:
+- ../common.yaml
+
+ftp_connection:
+  username: rclark
+  password: !decrypt gAAAAABojtmOz9Tr8tY1vIeoF_7a9LLSQbSs-SLi8H5bVubVl88bHDNqoMctqJ4x0PYAxgq9E6e1NuAsqj4tZlfWZY2E8QNeUg==
